@@ -1,174 +1,5 @@
-// import 'package:app/LonginScreen2.dart';
-// import 'package:flutter/material.dart';
-// import 'LonginScreen2.dart';
-// void main() {
-//   runApp(SignUpApp());
-// }
-
-// class SignUpApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(primarySwatch: Colors.blue),
-//       home: SignUpScreen1(),
-//     );
-//   }
-  
-// }
-// class SignUpScreen1 extends StatefulWidget {
-//   @override
-//   _SignUpScreen1State createState() => _SignUpScreen1State();
-// }
-
-
-// class _SignUpScreen1State extends State<SignUpScreen1> {
-//   final TextEditingController _emailController = TextEditingController();
-//   bool _isEmailValid = false;
-
-//   void _checkEmailValidity(String email) {
-//   if (email.contains(' ')) {
-//     setState(() {
-//       _isEmailValid = false; // Không hợp lệ nếu có dấu cách
-//     });
-//   } else if (email.endsWith('@gmail.com') || email.endsWith('.edu.vn') || email.endsWith('@yahoo.com')) {
-//     setState(() {
-//       _isEmailValid = true; // Hợp lệ nếu email đúng định dạng và không có dấu cách
-//     });
-//   } else {
-//     setState(() {
-//       _isEmailValid = false; // Không hợp lệ nếu không đúng định dạng
-//     });
-//   }
-// }
-
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Padding(
-//           padding: const EdgeInsets.only(top: 5),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               Padding(padding: EdgeInsets.only(top: 15),
-//                 child: TextButton(
-//                   onPressed: () {},
-//                   child: Text(
-//                     'Sign up',
-//                     style: TextStyle(
-//                       fontSize: 24,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.lightBlue,
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               Padding(
-//                 padding:  EdgeInsets.only(top: 15),                            
-//                   child: TextButton(
-//                     onPressed: () {},
-//                       child: Text ('Log in',
-//                         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.lightBlue),
-//                   ),
-//                 )
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.stretch,
-//           children: [
-//             Text(
-//               "App name",
-//               style: TextStyle(
-//                 fontSize: 24,
-//                 fontWeight: FontWeight.bold,
-//                 color: Colors.black87,
-//               ),
-//               textAlign: TextAlign.center,
-//             ),
-//             SizedBox(height: 20),
-//             Text(
-//               "Create an account",
-//               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-//               textAlign: TextAlign.center,
-//             ),
-//             SizedBox(height: 20),
-//             Text(
-//               "Enter your email to sign up for this app",
-//               style: TextStyle(fontSize: 15),
-//               textAlign: TextAlign.center,
-//             ),
-//             SizedBox(height: 10),
-//             TextField(
-//               controller: _emailController,
-//               onChanged: _checkEmailValidity, // Kiểm tra email mỗi khi thay đổi
-//               decoration: InputDecoration(
-//                 labelText: "Email@domain.com",
-//                 border: OutlineInputBorder(),
-//               ),
-//             ),
-//             SizedBox(height: 20),
-//             ElevatedButton(
-//               onPressed: _isEmailValid
-//                   ? () {
-//                       // Chuyển sang màn hình tiếp theo
-//                       Navigator.push(
-//                         context,
-//                         MaterialPageRoute(builder: (context) => SignUpScreen2()),
-//                       );
-//                     }
-//                   : null, // Vô hiệu hóa nút nếu email không hợp lệ
-//               style: ElevatedButton.styleFrom(
-//                 padding: EdgeInsets.symmetric(vertical: 15),
-//                 backgroundColor: Colors.black,
-//                 foregroundColor: Colors.white,
-//               ),
-//               child: Text("Continue"),
-//             ),
-            
-//             SizedBox(height: 20),
-//             Text(
-//               "You already have an account?", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
-//               textAlign: TextAlign.center,
-//             ),
-            
-//             SizedBox(height: 20),
-//             Text(
-//               "or",
-//               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
-//               textAlign: TextAlign.center,
-//             ),
-//             SizedBox(height: 20),
-//             Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 ElevatedButton.icon(
-//                   icon: Icon(Icons.g_mobiledata_rounded),
-//                   label: Text("Continue with Google"),
-//                   onPressed: () {},
-//                 ),
-//                 SizedBox(width: 10),
-//                 ElevatedButton.icon(
-//                   icon: Icon(Icons.apple,color: Colors.black,),
-//                   label: Text("Continue with Apple"),
-//                   onPressed: () {},
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
-import 'LonginScreen2.dart';
+import 'SignupScreen2.dart';
 
 void main() {
   runApp(SignUpApp());
@@ -192,82 +23,85 @@ class SignUpScreen1 extends StatefulWidget {
 
 class _SignUpScreen1State extends State<SignUpScreen1> {
   final TextEditingController _emailController = TextEditingController();
-  bool _isEmailValid = false;
+  bool _isEmailValid = false; // Trạng thái kiểm tra email
+  bool _isSignUpSelected = true; // Trạng thái của nút Sign up/Log in
 
-  // Trạng thái nút đang được chọn
-  bool _isSignUpSelected = true; // Mặc định chọn Sign Up
-
+  // Kiểm tra tính hợp lệ của email
   void _checkEmailValidity(String email) {
-    if (email.contains(' ')) {
-      setState(() {
-        _isEmailValid = false; // Không hợp lệ nếu có dấu cách
-      });
-    } else if (email.endsWith('@gmail.com') ||
-        email.endsWith('.edu.vn') ||
-        email.endsWith('@yahoo.com')) {
-      setState(() {
-        _isEmailValid = true; // Hợp lệ nếu email đúng định dạng và không có dấu cách
-      });
-    } else {
-      setState(() {
-        _isEmailValid = false; // Không hợp lệ nếu không đúng định dạng
-      });
-    }
+    // Regex kiểm tra email với đuôi .com hoặc .edu.vn
+    final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|edu\.vn)$');
+
+    setState(() {
+      _isEmailValid = regex.hasMatch(email); // Đánh dấu hợp lệ nếu regex khớp
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    _isSignUpSelected = true; // Chọn Sign Up
+                    _isSignUpSelected = true; // Chuyển sang Sign up
                   });
                 },
-                child: Text(
-                  'Sign up',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.lightBlue,
-                    decoration: _isSignUpSelected
-                        ? TextDecoration.underline
-                        : TextDecoration.none, // Gạch chân nếu được chọn
-                    decorationThickness: 3,
-                    decorationColor: Colors.lightBlue,
-                    height: 50,
-                  ),
+                child: Column(
+                  children: [
+                    Text(
+                      'Sign up',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: _isSignUpSelected ? Colors.blue : Colors.grey,
+                      ),
+                    ),
+                    if (_isSignUpSelected)
+                      Container(
+                        height: 5,
+                        width: 85,
+                        color: Colors.blue,
+                        margin: EdgeInsets.only(top: 5),
+                      ),
+                  ],
                 ),
               ),
+              SizedBox(width: 30),
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    _isSignUpSelected = false; // Chọn Log In
+                    _isSignUpSelected = false; // Chuyển sang Log in
                   });
-                  // Điều hướng sang màn hình Log In
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => LogInScreen()),
                   );
                 },
-                child: Text(
-                  'Log in',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.lightBlue,
-                    decoration: !_isSignUpSelected
-                        ? TextDecoration.underline
-                        : TextDecoration.none, // Gạch chân nếu được chọn
-                    decorationThickness: 3,
-                    decorationColor: Colors.lightBlue,
-                  ),
+                child: Column(
+                  children: [
+                    Text(
+                      'Log in',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: !_isSignUpSelected ? Colors.blue : Colors.grey,
+                      ),
+                    ),
+                    if (!_isSignUpSelected)
+                      Container(
+                        height: 5,
+                        width: 85,
+                        color: Colors.blue,
+                        margin: EdgeInsets.only(top: 5),
+                      ),
+                  ],
                 ),
               ),
             ],
@@ -276,17 +110,18 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
       ),
       body: GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus(); // Thoát bàn phím khi nhấn vùng trống
+          FocusScope.of(context).unfocus();
         },
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              SizedBox(height: 20),
               Text(
                 "App name",
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
@@ -295,29 +130,32 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
               SizedBox(height: 20),
               Text(
                 "Create an account",
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-              Text(
-                "Enter your email to sign up for this app",
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 10),
+              Text(
+                "Enter your email to sign up for this app",
+                style: TextStyle(fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
               TextField(
                 controller: _emailController,
-                onChanged: _checkEmailValidity, // Kiểm tra email mỗi khi thay đổi
+                onChanged: _checkEmailValidity, // Gọi hàm kiểm tra email
                 decoration: InputDecoration(
-                  labelText: "Email@domain.com",
+                  labelText: "email@domain.com",
                   border: OutlineInputBorder(),
+                  errorText: !_isEmailValid && _emailController.text.isNotEmpty
+                      ? 'Invalid email. Must end with .com or .edu.vn'
+                      : null,
                 ),
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _isEmailValid
                     ? () {
-                        // Chuyển sang màn hình tiếp theo
+                        // Chuyển sang màn hình tiếp theo nếu email hợp lệ
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -328,40 +166,58 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 15),
                   backgroundColor:
-                      _isEmailValid ? Colors.blue : Colors.grey, // Nút mờ khi vô hiệu
-                  foregroundColor: Colors.white,
+                      _isEmailValid ? Colors.black87 : Colors.grey, // Đổi màu theo trạng thái
                 ),
-                child: Text("Continue"),
+                child: Text(
+                  "Continue",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               Text(
                 "You already have an account?",
                 style: TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey,
+                ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Text(
                 "or",
                 style: TextStyle(
-                    fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey,
+                ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20),
-              ElevatedButton.icon(
-                icon: Icon(Icons.g_mobiledata_rounded),
+              OutlinedButton.icon(
+                icon: Icon(Icons.g_mobiledata, color: Colors.red),
                 label: Text("Continue with Google"),
-                onPressed: () {
-                  // TODO: Thêm logic đăng nhập với Google
-                },
+                onPressed: () {},
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                ),
               ),
               SizedBox(height: 10),
-              ElevatedButton.icon(
+              OutlinedButton.icon(
                 icon: Icon(Icons.apple, color: Colors.black),
                 label: Text("Continue with Apple"),
-                onPressed: () {
-                  // TODO: Thêm logic đăng nhập với Apple
-                },
+                onPressed: () {},
+                style: OutlinedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+              SizedBox(height: 30),
+              Text(
+                "By clicking continue, you agree to our Terms of Service and Privacy Policy",
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
@@ -378,6 +234,7 @@ class LogInScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Log In"),
+        centerTitle: true,
       ),
       body: Center(
         child: Text("This is the Log In screen"),
