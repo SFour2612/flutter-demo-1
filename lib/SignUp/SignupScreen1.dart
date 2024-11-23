@@ -1,20 +1,7 @@
 import 'package:flutter/material.dart';
 import 'SignupScreen2.dart';
 
-void main() {
-  runApp(SignUpApp());
-}
 
-class SignUpApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: SignUpScreen1(),
-    );
-  }
-}
 
 class SignUpScreen1 extends StatefulWidget {
   @override
@@ -77,11 +64,11 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    _isSignUpSelected = false; // Chuyển sang Log in
+                    _isSignUpSelected = false; 
                   });
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LogInScreen()),
+                    MaterialPageRoute(builder: (context) => LogInScreen()),// Chuyển sang Log in
                   );
                 },
                 child: Column(
@@ -176,14 +163,26 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                "You already have an account?",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-                textAlign: TextAlign.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'You already have an account? ',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LogInScreen()),
+                      );
+                    },
+                    child: Text(
+                      'Log in',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: const Color.fromARGB(255, 19, 120, 202)),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 10),
               Text(
@@ -213,11 +212,55 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                   padding: EdgeInsets.symmetric(vertical: 12),
                 ),
               ),
-              SizedBox(height: 30),
-              Text(
-                "By clicking continue, you agree to our Terms of Service and Privacy Policy",
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-                textAlign: TextAlign.center,
+              // SizedBox(height: 30),
+              // Text(
+              //   "By clicking continue, you agree to our Terms of Service and Privacy Policy",
+              //   style: TextStyle(fontSize: 12, color: Colors.grey),
+              //   textAlign: TextAlign.center,
+              // ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'By clicking continue, you agree to our',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Terms()),
+                      );
+                    },
+                    child: Text(
+                      'Terms of Service',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'and ',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Terms()),
+                      );
+                    },
+                    child: Text(
+                      'Privacy Policy',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -238,6 +281,20 @@ class LogInScreen extends StatelessWidget {
       ),
       body: Center(
         child: Text("This is the Log In screen"),
+      ),
+    );
+  }
+}
+class Terms extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Terms of Service and Privary Policy"),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Text("This is the Terms of Service and Privary Policy screen"),
       ),
     );
   }
