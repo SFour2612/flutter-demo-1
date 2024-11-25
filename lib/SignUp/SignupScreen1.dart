@@ -1,8 +1,6 @@
 import 'package:app/LogIn/Login1.dart';
+import 'package:app/SignUp/SignupScreen2.dart';
 import 'package:flutter/material.dart';
-import 'SignupScreen2.dart';
-
-
 
 class SignUpScreen1 extends StatefulWidget {
   @override
@@ -11,298 +9,374 @@ class SignUpScreen1 extends StatefulWidget {
 
 class _SignUpScreen1State extends State<SignUpScreen1> {
   final TextEditingController _emailController = TextEditingController();
-  bool _isEmailValid = false; // Trạng thái kiểm tra email
-  bool _isSignUpSelected = true; // Trạng thái của nút Sign up/Log in
+  final TextEditingController _loginEmailController = TextEditingController();
+  final TextEditingController _loginPasswordController = TextEditingController();
 
-  // Kiểm tra tính hợp lệ của email
+  bool _isEmailValid = false;
+  bool _isLoginEmailValid = false;
+  bool _isPasswordValid = false;
+  int _selectedIndex = 0; // 0: Sign Up, 1: Log In
+
+  // Kiểm tra email
   void _checkEmailValidity(String email) {
-    // Regex kiểm tra email với đuôi .com hoặc .edu.vn
     final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|edu\.vn)$');
-
     setState(() {
-      _isEmailValid = regex.hasMatch(email); // Đánh dấu hợp lệ nếu regex khớp
+      _isEmailValid = regex.hasMatch(email);
+    });
+  }
+
+  void _checkLoginEmailValidity(String email) {
+    final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|edu\.vn)$');
+    setState(() {
+      _isLoginEmailValid = regex.hasMatch(email);
+    });
+  }
+
+  void _checkPasswordValidity(String password) {
+    setState(() {
+      _isPasswordValid = password.length >= 6;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isSignUpSelected = true; // Chuyển sang Sign up
-                  });
-                },
-                child: Column(
-                  children: [
-                    Text(
-                      'Sign up',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: _isSignUpSelected ? Colors.blue : Colors.grey,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus(); // Bỏ focus khi nhấn ngoài
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = 0; // Chuyển sang Sign Up
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        'Sign up',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: _selectedIndex == 0 ? Colors.blue : Colors.grey,
+                        ),
                       ),
-                    ),
-                    if (_isSignUpSelected)
-                      Container(
-                        height: 5,
-                        width: 85,
-                        color: Colors.blue,
-                        margin: EdgeInsets.only(top: 5),
-                      ),
-                  ],
+                      if (_selectedIndex == 0)
+                        Container(
+                          height: 5,
+                          width: 85,
+                          color: Colors.blue,
+                          margin: EdgeInsets.only(top: 5),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(width: 30),
-              GestureDetector(
-  onTap: () async {
-    // Điều hướng đến Login1 và chờ kết quả trả về
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Login1()),
-    );
-
-    // Nếu quay lại từ Login1, làm nổi bật Sign Up
-    if (result == true) {
-      setState(() {
-        _isSignUpSelected = true; // Đặt trạng thái về Sign Up
-      });
-    }
-  },
-  child: Column(
-    children: [
-      Text(
-        'Log in',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: !_isSignUpSelected ? Colors.blue : Colors.grey,
-        ),
-      ),
-      if (!_isSignUpSelected)
-        Container(
-          height: 5,
-          width: 85,
-          color: Colors.blue,
-          margin: EdgeInsets.only(top: 5),
-        ),
-    ],
-  ),
-),
-
-            ],
+                SizedBox(width: 30),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedIndex = 1; // Chuyển sang Log In
+                    });
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        'Log in',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: _selectedIndex == 1 ? Colors.blue : Colors.grey,
+                        ),
+                      ),
+                      if (_selectedIndex == 1)
+                        Container(
+                          height: 5,
+                          width: 85,
+                          color: Colors.blue,
+                          margin: EdgeInsets.only(top: 5),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: [
+            _buildSignUpContent(context),
+            _buildLoginContent(context),
+          ],
+        ),
       ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    );
+  }
+
+  Widget _buildSignUpContent(BuildContext context) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(height: 20),
+          Text(
+            "App name",
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 20),
+          Text(
+            "Create an account",
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 10),
+          Text(
+            "Enter your email to sign up for this app",
+            style: TextStyle(fontSize: 14),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 20),
+          TextField(
+            controller: _emailController,
+            onChanged: _checkEmailValidity,
+            decoration: InputDecoration(
+              labelText: "email@domain.com",
+              border: OutlineInputBorder(),
+              errorText: !_isEmailValid && _emailController.text.isNotEmpty
+                  ? 'Invalid email. Must end with .com or .edu.vn'
+                  : null,
+            ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _isEmailValid
+                ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUpScreen2()),
+                    );
+                  }
+                : null,
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(vertical: 15),
+              backgroundColor: _isEmailValid ? Colors.black87 : Colors.grey,
+            ),
+            child: Text(
+              "Continue",
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          Text(
+            "or",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 20),
+          OutlinedButton.icon(
+            icon: Icon(Icons.g_mobiledata, color: Colors.red),
+            label: Text("Continue with Google"),
+            onPressed: () {
+              // Thêm logic xử lý Google Sign-In tại đây
+            },
+          ),
+          SizedBox(height: 10),
+          OutlinedButton.icon(
+            icon: Icon(Icons.apple, color: Colors.black),
+            label: Text("Continue with Apple"),
+            onPressed: () {
+              // Thêm logic xử lý Apple Sign-In tại đây
+            },
+          ),
+          SizedBox(height: 20),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 20),
-              Text(
-                "App name",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-                textAlign: TextAlign.center,
+              Row(
+              children: [Text(
+                'By clicking continue, you agree to our ',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
-              SizedBox(height: 20),
-              Text(
-                "Create an account",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 10),
-              Text(
-                "Enter your email to sign up for this app",
-                style: TextStyle(fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: _emailController,
-                onChanged: _checkEmailValidity, // Gọi hàm kiểm tra email
-                decoration: InputDecoration(
-                  labelText: "email@domain.com",
-                  border: OutlineInputBorder(),
-                  errorText: !_isEmailValid && _emailController.text.isNotEmpty
-                      ? 'Invalid email. Must end with .com or .edu.vn'
-                      : null,
-                ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _isEmailValid
-                    ? () {
-                        // Chuyển sang màn hình tiếp theo nếu email hợp lệ
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignUpScreen2()),
-                        );
-                      }
-                    : null, // Vô hiệu hóa nút nếu email không hợp lệ
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  backgroundColor:
-                      _isEmailValid ? Colors.black87 : Colors.grey, // Đổi màu theo trạng thái
-                ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TermsScreen()),
+                  );
+                },
                 child: Text(
-                  "Continue",
+                  'Terms of Service',
                   style: TextStyle(
-                    color: Colors.white,
-                  ),
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87),
                 ),
               ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'You already have an account? ',
-                    style: TextStyle(fontSize: 14, color: Colors.grey), 
-                  ),
-                  GestureDetector(
-                    onTap: ()async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Login1()),
-                      );
-                    },
-                    child: Text(
-                      'Log in',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: const Color.fromARGB(255, 19, 120, 202)),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Text(
-                "or",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.grey,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
-              OutlinedButton.icon(
-                icon: Icon(Icons.g_mobiledata, color: Colors.red),
-                label: Text("Continue with Google"),
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
-              SizedBox(height: 10),
-              OutlinedButton.icon(
-                icon: Icon(Icons.apple, color: Colors.black),
-                label: Text("Continue with Apple"),
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
-              // SizedBox(height: 30),
-              // Text(
-              //   "By clicking continue, you agree to our Terms of Service and Privacy Policy",
-              //   style: TextStyle(fontSize: 12, color: Colors.grey),
-              //   textAlign: TextAlign.center,
-              // ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'By clicking continue, you agree to our',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Terms()),
-                      );
-                    },
-                    child: Text(
-                      'Terms of Service',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87),
-                    ),
-                  ),
-                ],
+              
+            ]
               ),
               SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'and ',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  Text('and ',
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Terms()),
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>TermsScreen()
+                      )
                       );
                     },
-                    child: Text(
-                      'Privacy Policy',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87),
-                    ),
-                  ),
+                    child: Text('Privacy Policy',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black87)),
+                  )
                 ],
-              ),
+              )
             ],
           ),
-        ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoginContent(BuildContext context) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "App Name",
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          SizedBox(height: 20),
+          TextField(
+            controller: _loginEmailController,
+            onChanged: _checkLoginEmailValidity,
+            decoration: InputDecoration(
+              labelText: "email@domain.com",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 20),
+          TextField(
+            controller: _loginPasswordController,
+            obscureText: true,
+            onChanged: _checkPasswordValidity,
+            decoration: InputDecoration(
+              labelText: "Enter your password",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 10),
+          Align(
+  alignment: Alignment.centerRight,
+  child: GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ForgotPassword()),
+      );
+    },
+    child: Text(
+      'Forgot Password',
+      style: TextStyle(
+        fontSize: 10,
+        fontWeight: FontWeight.w800,
+        color: Colors.black87,
+      ),
+    ),
+  ),
+),
+          SizedBox(height: 15),
+          SizedBox(
+            width: double.infinity,
+            height:50 ,
+            child: ElevatedButton(
+            onPressed: (_isLoginEmailValid && _isPasswordValid) ? () {} : null,
+            style: ElevatedButton.styleFrom(padding: 
+            EdgeInsets.symmetric(vertical: 15),
+            backgroundColor: _isLoginEmailValid && _isPasswordValid ? Colors.black87 : Colors.grey,),
+            child: Text("Log in",
+            style: TextStyle(color: Colors.white),),
+          ),),
+          SizedBox(height: 8),
+          Text(
+            "or",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+          ),
+          SizedBox(height: 18),
+          SizedBox(
+            width: double.infinity,
+            child: 
+          OutlinedButton.icon(
+            icon: Icon(Icons.g_mobiledata, color: Colors.red),
+            label: Text("Continue with Google"),
+            onPressed: () {
+              // Thêm logic xử lý Google Sign-In tại đây
+            },
+          ),),
+          SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: 
+          OutlinedButton.icon(
+            icon: Icon(Icons.apple, color: Colors.black),
+            label: Text("Continue with Apple"),
+            onPressed: () {
+              // Thêm logic xử lý Apple Sign-In tại đây
+            },
+          ),)
+        ],
       ),
     );
   }
 }
 
-// Dummy LogInScreen
-// class LogInScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Log In"),
-//         centerTitle: true,
-//       ),
-//       body: Center(
-//         child: Text("This is the Log In screen"),
-//       ),
-//     );
-//   }
-// }
-class Terms extends StatelessWidget {
+
+class TermsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Terms of Service and Privary Policy"),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Text("This is the Terms of Service and Privary Policy screen"),
-      ),
+      appBar: AppBar(title: Text("Terms of Service")),
+      body: Center(child: Text("Terms of Service content here.")),
+    );
+  }
+}
+
+class PrivacyPolicyScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Privacy Policy")),
+      body: Center(child: Text("Privacy Policy content here.")),
     );
   }
 }
