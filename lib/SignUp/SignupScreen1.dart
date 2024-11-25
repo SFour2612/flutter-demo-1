@@ -1,3 +1,4 @@
+import 'package:app/LogIn/Login1.dart';
 import 'package:flutter/material.dart';
 import 'SignupScreen2.dart';
 
@@ -62,35 +63,41 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
               ),
               SizedBox(width: 30),
               GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isSignUpSelected = false; 
-                  });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LogInScreen()),// Chuyển sang Log in
-                  );
-                },
-                child: Column(
-                  children: [
-                    Text(
-                      'Log in',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: !_isSignUpSelected ? Colors.blue : Colors.grey,
-                      ),
-                    ),
-                    if (!_isSignUpSelected)
-                      Container(
-                        height: 5,
-                        width: 85,
-                        color: Colors.blue,
-                        margin: EdgeInsets.only(top: 5),
-                      ),
-                  ],
-                ),
-              ),
+  onTap: () async {
+    // Điều hướng đến Login1 và chờ kết quả trả về
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Login1()),
+    );
+
+    // Nếu quay lại từ Login1, làm nổi bật Sign Up
+    if (result == true) {
+      setState(() {
+        _isSignUpSelected = true; // Đặt trạng thái về Sign Up
+      });
+    }
+  },
+  child: Column(
+    children: [
+      Text(
+        'Log in',
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: !_isSignUpSelected ? Colors.blue : Colors.grey,
+        ),
+      ),
+      if (!_isSignUpSelected)
+        Container(
+          height: 5,
+          width: 85,
+          color: Colors.blue,
+          margin: EdgeInsets.only(top: 5),
+        ),
+    ],
+  ),
+),
+
             ],
           ),
         ),
@@ -168,13 +175,13 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
                 children: [
                   Text(
                     'You already have an account? ',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                    style: TextStyle(fontSize: 14, color: Colors.grey), 
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: ()async {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LogInScreen()),
+                        MaterialPageRoute(builder: (context) => Login1()),
                       );
                     },
                     child: Text(
@@ -271,20 +278,20 @@ class _SignUpScreen1State extends State<SignUpScreen1> {
 }
 
 // Dummy LogInScreen
-class LogInScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Log In"),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Text("This is the Log In screen"),
-      ),
-    );
-  }
-}
+// class LogInScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("Log In"),
+//         centerTitle: true,
+//       ),
+//       body: Center(
+//         child: Text("This is the Log In screen"),
+//       ),
+//     );
+//   }
+// }
 class Terms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
