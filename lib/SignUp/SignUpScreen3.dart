@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Done.dart';
 
  class SignUpScreen3 extends StatelessWidget {
   @override
@@ -42,7 +43,10 @@ import 'package:flutter/material.dart';
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (context)=> Done()) );
+              },
               child: Text("Save New Password"),
             ),
           ],
